@@ -160,11 +160,11 @@ class GaussianDiffusion(Model):
             beta = extract(self.beta, t)
 
             alpha_hat_prev = extract(self.alpha_hat_prev, t)
-            beta_hat = beta * (1 - alpha_hat_prev) / (1 - alpha_hat) # similar to beta
+            beta_hat = beta * (1 - alpha_hat_prev) / (1 - alpha_hat)  # similar to beta
 
             if i > 1:
                 noise = tf.random.normal(shape=x.shape)
-            else: # last step
+            else:  # last step
                 noise = tf.zeros_like(x)
 
             if self.objective == 'ddpm':
@@ -180,7 +180,7 @@ class GaussianDiffusion(Model):
 
                 x = predict_x0 + direction_point + random_noise
 
-            else: # general form
+            else:  # general form
                 sigma = self.eta * tf.sqrt((1 - alpha_hat_prev) / (1 - alpha_hat)) * tf.sqrt(1 - (alpha_hat / alpha_hat_prev))
                 predict_x0 = alpha_hat_prev * (x - tf.sqrt(1 - alpha_hat) * predicted_noise) / tf.sqrt(alpha_hat)
                 direction_point = tf.sqrt(1 - alpha_hat_prev - tf.square(sigma)) * predicted_noise
